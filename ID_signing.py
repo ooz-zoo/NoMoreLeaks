@@ -66,8 +66,7 @@ def generate_signed_claim(temp_storage_path: str, gov_db_path: str, batch_passwo
         "expires_at": (datetime.now(UTC) + timedelta(hours=24)).isoformat(),
         "public_key": user_temp["public_key"]
     }
-    print("\n=== Claim Data (To Be Signed) ===")
-    print(json.dumps(claim_data, indent=2))
+  
 
     # Decrypt and sign
     priv_key = decrypt_private_key(
