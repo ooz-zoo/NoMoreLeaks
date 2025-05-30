@@ -91,5 +91,4 @@ if __name__ == "__main__":
         batch_password=os.environ.get('env_var')
     )
     
-    print("\n=== FINAL SIGNED CLAIM ===")
-    print(json.dumps(signed_claim, indent=2))
+   
