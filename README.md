@@ -5,7 +5,7 @@ This solution helps users convert verified identity claims into reusable, privac
 ## The Problem  
 Every time you apply for a job, apartment, or various services (depending on where you are located), you're forced to surrender your passport, SSN, or ID. This creates:  
 - **Identity theft risks** (Equifax-style breaches)  
--  **Privacy violations** (employers seeing unnecessary personal data)  
+-  **Privacy violations** (exposure of too much personal data)  
 
 # Project Overview
 
