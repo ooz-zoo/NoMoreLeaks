@@ -81,7 +81,7 @@ class VerificationResult(BaseModel):
     issuer: str
     verified_claims: list[str]
     error: str = None
-    jwt_token: str = None  # Will contain signed JWT if verification succeeds
+    jwt_token: str = None  # signed JWT if verification succeeds
 
 @app.post("/verify-claim", response_model=VerificationResult)
 async def verify_claim(file: UploadFile = File(...)):
@@ -153,7 +153,7 @@ async def verify_claim(file: UploadFile = File(...)):
                 "error": error_msg
             }
 
-        # Prepare verified data
+        
         data = claim_data["data"]
         verified_claims = [
             f"Name: {data['name']}",
@@ -177,7 +177,7 @@ async def verify_claim(file: UploadFile = File(...)):
         print("\nJWT payload to be signed:")
         print(json.dumps(jwt_payload, indent=2))
 
-        # Sign JWT with private key
+        # Sign JWT 
         jwt_token = jwt.encode(
             jwt_payload,
             private_key,
@@ -187,7 +187,7 @@ async def verify_claim(file: UploadFile = File(...)):
         print(jwt_token)
         print(f"Token length: {len(jwt_token)} characters")
 
-        # Return verification result with JWT token
+    
         response_data = {
             "status": "verified",
              "issuer": data["issued_by"],
@@ -199,13 +199,12 @@ async def verify_claim(file: UploadFile = File(...)):
         key="badge_token",
         value=jwt_token,
         httponly=True,
-        secure=True,  # Enable in production
+        secure=True,  
         samesite="none",
         max_age=86400,
         path="/",
     )
-        print("\n=== Verification completed successfully ===")
-        print(f"JWT stored in secure cookie, not response body")
+        
         return response
 
     except json.JSONDecodeError as e:
@@ -228,7 +227,7 @@ async def verify_claim(file: UploadFile = File(...)):
 
 @app.get("/badge")
 async def get_badge(request: Request):
-    """Secure badge endpoint using HTTP-only cookie"""
+    
     try:
         
         token = request.cookies.get("badge_token")
@@ -243,7 +242,7 @@ async def get_badge(request: Request):
                 options={"verify_signature": False}  
             )
             
-            # 3. Return minimal sanitized data
+            
             return {
                 "badge_id": f"B-{uuid.uuid4()}",  
                 "name": decoded["name"],
