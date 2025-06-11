@@ -36,29 +36,28 @@ def encrypt_private_key(priv_key_hex: str, password: str) -> tuple:
     return f"{salt.hex()}:{encrypted.hex()}", salt.hex()
 
 def process_users(input_file='gov_db.json', output_file='user_keys.json'):
-    """Modified to include encryption"""
+    
     with open(input_file) as f:
         data = json.load(f)
     
-    # Generate a strong random password for batch encryption
-    # In production, you'd want to use per-user passwords!
+
     batch_password = base64.urlsafe_b64encode(os.urandom(32)).decode()
     
     results = []
     for user in data['ID_data']:
         priv_key, pub_key = generate_key_pair()
         
-        # Encrypt the private key immediately after generation
+        
         encrypted_priv, salt = encrypt_private_key(priv_key, batch_password)
         
         results.append({
             'name': user['Full Name'],
             'id': user['Identification_no'],
-            'encrypted_private_key': encrypted_priv,  # Now encrypted!
+            'encrypted_private_key': encrypted_priv,  
             'public_key': pub_key,
             'key_derivation_salt': salt,
             'generated_at': datetime.now().isoformat()
-            # Note: In real usage, don't store the password in the JSON!
+            # Never store the password in the JSON!
         })
     
     os.makedirs('temp_storage', exist_ok=True)
@@ -68,7 +67,7 @@ def process_users(input_file='gov_db.json', output_file='user_keys.json'):
         json.dump({'users': results,}, f, indent=2)
     
     print(f"Generated encrypted keys for {len(results)} users in {output_path}")
-    print(f"⚠️ BATCH PASSWORD (KEEP SECURE): {batch_password}")
+    print(f" BATCH PASSWORD (KEEP SECURE): {batch_password}")
 
 if __name__ == '__main__':
     process_users()
